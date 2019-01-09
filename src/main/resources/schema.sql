@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS property (
   type               VARCHAR(255) NOT NULL,
   PRIMARY KEY (id)
 );
-CREATE TABLE IF NOT EXISTS user (
+CREATE TABLE IF NOT EXISTS users (
   email VARCHAR(255) NOT NULL,
   role  VARCHAR(255),
   PRIMARY KEY (email)

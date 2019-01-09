@@ -1,3 +1,3 @@
-insert into user VALUES ('testEditor@gmail.com','ROLE_EDITOR');
-insert into user VALUES ('testUser@gmail.com','ROLE_USER');
-insert into user VALUES ('testAdmin@gmail.com','ROLE_ADMIN');
+insert into users VALUES ('testEditor@gmail.com','ROLE_EDITOR');
+insert into users VALUES ('testUser@gmail.com','ROLE_USER');
+insert into users VALUES ('testAdmin@gmail.com','ROLE_ADMIN');
