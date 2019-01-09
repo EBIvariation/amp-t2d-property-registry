@@ -35,8 +35,8 @@ import javax.validation.constraints.Size;
 import java.time.ZonedDateTime;
 
 @Entity
-@EntityListeners(AuditingEntityListener.class)
-public class Property {
+@EntityListeners({AuditingEntityListener.class, EntityEventListener.class})
+public class Property implements IdentifiableEntity<String> {
 
     public enum Type {
 
@@ -102,4 +102,7 @@ public class Property {
     @LastModifiedDate
     private ZonedDateTime lastModifiedDate;
 
+    public String getId() {
+        return id;
+    }
 }

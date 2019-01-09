@@ -34,8 +34,8 @@ import javax.validation.constraints.Size;
 import java.time.ZonedDateTime;
 
 @Entity
-@EntityListeners(AuditingEntityListener.class)
-public class Phenotype {
+@EntityListeners({AuditingEntityListener.class, EntityEventListener.class})
+public class Phenotype implements IdentifiableEntity<String> {
 
     public enum Group {
 
@@ -68,4 +68,8 @@ public class Phenotype {
 
     @LastModifiedDate
     private ZonedDateTime lastModifiedDate;
+
+    public String getId() {
+        return id;
+    }
 }

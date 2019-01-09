@@ -23,12 +23,18 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import uk.ac.ebi.ampt2d.registry.repositories.PhenotypeRepository;
 import uk.ac.ebi.ampt2d.registry.repositories.PropertyRepository;
+import uk.ac.ebi.ampt2d.registry.service.mail.MailService;
 
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.doNothing;
+import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_CLASS;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
@@ -38,8 +44,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(properties = "security.enabled=true")
+@SpringBootTest(properties = {"security.enabled=true", "spring.jpa.hibernate.ddl-auto=none"})
 @AutoConfigureMockMvc
+@DirtiesContext(classMode = AFTER_CLASS)
 public class PropertyRegistryServiceApplicationTests {
 
     @Autowired
@@ -54,8 +61,12 @@ public class PropertyRegistryServiceApplicationTests {
     @Autowired
     private PropertyRepository propertyRepository;
 
+    @MockBean
+    private MailService mailService;
+
     @Before
-    public void deleteAllBeforeTests() throws Exception {
+    public void setUp() throws Exception {
+        doNothing().when(mailService).send(anyString());
         phenotypeRepository.deleteAll();
         propertyRepository.deleteAll();
     }
@@ -302,7 +313,7 @@ public class PropertyRegistryServiceApplicationTests {
         mockMvc.perform(put("/phenotypes/BMI").with(oAuthHelper.bearerToken("testAdmin@gmail.com"))
                 .content("{\"phenotypeGroup\": \"GLYCEMIC\"}")).andExpect(status().isNoContent());
         mockMvc.perform(delete("/properties/CALL_RATE").with(oAuthHelper.bearerToken("testUser@gmail.com")))
-               .andExpect(status().isForbidden());
+                .andExpect(status().isForbidden());
         mockMvc.perform(delete("/properties/CALL_RATE").with(oAuthHelper.bearerToken("testEditor@gmail.com")))
                 .andExpect(status().isNoContent());
 

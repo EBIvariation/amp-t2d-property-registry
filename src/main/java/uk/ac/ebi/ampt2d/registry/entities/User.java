@@ -24,7 +24,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Id;
 
-@Entity
+@Entity(name = "users")
 public class User {
 
     public enum Role {
