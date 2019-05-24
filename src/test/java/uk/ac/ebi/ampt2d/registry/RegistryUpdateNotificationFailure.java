@@ -17,6 +17,7 @@
  */
 package uk.ac.ebi.ampt2d.registry;
 
+import com.fasterxml.classmate.TypeResolver;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureJsonTesters
 @DirtiesContext(classMode = BEFORE_CLASS)
 public class RegistryUpdateNotificationFailure {
+
+    @Autowired
+    private TypeResolver typeResolver;
 
     @Autowired
     private MockMvc mockMvc;

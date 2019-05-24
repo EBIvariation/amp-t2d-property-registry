@@ -18,8 +18,8 @@
 package uk.ac.ebi.ampt2d.registry.config;
 
 import com.fasterxml.classmate.TypeResolver;
-import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
+//import com.google.common.base.Predicate;
+//import com.google.common.base.Predicates;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -43,7 +43,9 @@ import springfox.documentation.spring.data.rest.configuration.SpringDataRestConf
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger.web.UiConfiguration;
 import springfox.documentation.swagger.web.UiConfigurationBuilder;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
+//import springfox.documentation.swagger2.annotations.EnableSwagger2;
+import springfox.documentation.swagger2.annotations.EnableSwagger2WebFlux;
+
 
 import java.lang.reflect.WildcardType;
 import java.util.Arrays;
@@ -51,12 +53,13 @@ import java.util.Arrays;
 import static springfox.documentation.schema.AlternateTypeRules.newRule;
 
 @Configuration
-@EnableSwagger2
-@Import({SpringDataRestConfiguration.class, BeanValidatorPluginsConfiguration.class})
+//@EnableSwagger2
+@EnableSwagger2WebFlux
+@Import({/*SpringDataRestConfiguration.class, */BeanValidatorPluginsConfiguration.class})
 public class SwaggerConfiguration {
 
-    @Autowired
-    private TypeResolver typeResolver;
+//    @Autowired
+//    private TypeResolver typeResolver;
 
     private SecurityReference securityReference = SecurityReference.builder()
             .reference("Authorization").scopes(new AuthorizationScope[0]).build();
@@ -69,8 +72,10 @@ public class SwaggerConfiguration {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
                 .apis(RequestHandlerSelectors.any())
-                .paths(getScanRestServicesPathPredicate())
+                .paths(PathSelectors.any()) //getScanRestServicesPathPredicate())
+//                .paths(getScanRestServicesPathPredicate())
                 .build()
+/*
                 .apiInfo(getApiInfo())
                 .pathMapping("/")
                 .tags(
@@ -81,17 +86,18 @@ public class SwaggerConfiguration {
                 .securitySchemes(Arrays.asList(new ApiKey("Authorization", "Authorization", "header")))
                 .securityContexts(Arrays.asList(securityContext))
                 .alternateTypeRules(getSubstitutionRules());
-
+*/
+;
     }
 
-    private Predicate<String> getScanRestServicesPathPredicate() {
+/*    private Predicate<String> getScanRestServicesPathPredicate() {
         return Predicates.and(
                 Predicates.not(PathSelectors.regex("/actuator.*")), // Hide spring-actuator
                 Predicates.not(PathSelectors.regex("/error.*")), // Hide spring-data error
                 Predicates.not(PathSelectors.regex("/profile.*")),// Hide spring-data profile
                 Predicates.not(PathSelectors.regex("/users.*")) // Hide user-profile
         );
-    }
+    }*/
 
     private ApiInfo getApiInfo() {
         return new ApiInfoBuilder()
@@ -105,11 +111,11 @@ public class SwaggerConfiguration {
                 .build();
     }
 
-    private AlternateTypeRule getSubstitutionRules() {
-        return newRule(typeResolver.resolve(DeferredResult.class,
-                typeResolver.resolve(ResponseEntity.class, WildcardType.class)),
-                typeResolver.resolve(WildcardType.class));
-    }
+//    private AlternateTypeRule getSubstitutionRules() {
+//        return newRule(typeResolver.resolve(DeferredResult.class,
+//                typeResolver.resolve(ResponseEntity.class, WildcardType.class)),
+//                typeResolver.resolve(WildcardType.class));
+//    }
 
     @Bean
     UiConfiguration uiConfig() {

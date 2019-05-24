@@ -20,17 +20,22 @@ package uk.ac.ebi.ampt2d.registry;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.boot.web.support.SpringBootServletInitializer;
+//import org.springframework.boot.web.support.SpringBootServletInitializer;
+//import org.springframework.boot.web.servlet.support.SpringBootServletInitializer; 2.x
+import org.springframework.core.SpringVersion;
 
 @SpringBootApplication
-public class PropertyRegistryServiceApplication extends SpringBootServletInitializer {
+public class PropertyRegistryServiceApplication {//} extends SpringBootServletInitializer {
 
     public static void main(String[] args) throws Exception {
+
+        System.out.println("version===: " + SpringVersion.getVersion());
+
         SpringApplication.run(PropertyRegistryServiceApplication.class, args);
     }
 
-    @Override
-    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-        return application.sources(PropertyRegistryServiceApplication.class);
-    }
+//    @Override
+//    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+//        return application.sources(PropertyRegistryServiceApplication.class);
+//    }
 }
