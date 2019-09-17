@@ -34,6 +34,8 @@ public class EnableSecurityConfig extends ResourceServerConfigurerAdapter {
 
     private static final String[] AUTH_WHITELIST = {
             // -- swagger ui
+            "/**",
+            "/*",
             "/v2/api-docs",
             "/swagger-resources",
             "/swagger-resources/**",

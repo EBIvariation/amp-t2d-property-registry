@@ -18,7 +18,6 @@
 package uk.ac.ebi.ampt2d.registry.entities;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -68,7 +67,6 @@ public class Property implements IdentifiableEntity<String> {
 
     }
 
-    @ApiModelProperty(position = 1)
     @JsonProperty
     @NotNull
     @Size(min = 1, max = 255)
@@ -76,21 +74,18 @@ public class Property implements IdentifiableEntity<String> {
     @Column(nullable = false, unique = true, updatable = false)
     private String id;
 
-    @ApiModelProperty(position = 2)
     @JsonProperty
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Type type;
 
-    @ApiModelProperty(position = 3)
     @JsonProperty
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Meaning meaning;
 
-    @ApiModelProperty(position = 4)
     @JsonProperty
     @NotNull
     @NotBlank

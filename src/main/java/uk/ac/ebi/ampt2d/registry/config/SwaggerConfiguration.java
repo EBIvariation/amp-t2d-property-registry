@@ -16,7 +16,7 @@
  *
  */
 package uk.ac.ebi.ampt2d.registry.config;
-
+/*
 import com.fasterxml.classmate.TypeResolver;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
@@ -122,3 +122,4 @@ public class SwaggerConfiguration {
     }
 
 }
+*/
