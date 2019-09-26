@@ -12,7 +12,7 @@ info:
     name: "Apache 2.0"
     url: "https://www.apache.org/license/"
 servers:
-  - url: http://localhost:8080/amp-t2d-property-registry-0.1.0/
+  - url: http://ves-hx-e9.ebi.ac.uk:8080/dev/registry/
     description: Production server
 paths:
   /phenotypes:
@@ -109,7 +109,7 @@ components:
       type: oauth2
       flows:
         authorizationCode:
-          tokenUrl:  http://localhost:8080/ega/ampt2d/auth/realms/securemetadata/protocol/openid-connect/token
-          authorizationUrl: http://localhost:8080/ega/ampt2d/auth/realms/securemetadata/protocol/openid-connect/auth
+          tokenUrl:  http://ves-hx-e9.ebi.ac.uk:8080/dev/registry/ega/ampt2d/auth/realms/securemetadata/protocol/openid-connect/token
+          authorizationUrl: http://ves-hx-e9.ebi.ac.uk:8080/dev/registry/ega/ampt2d/auth/realms/securemetadata/protocol/openid-connect/auth
           scopes:
             opened: openid

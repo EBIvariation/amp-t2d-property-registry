@@ -50,7 +50,6 @@ public class EnableSecurityConfig extends ResourceServerConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers(AUTH_WHITELIST).permitAll()
                 .antMatchers("/users/**").hasRole("ADMIN")
-                .antMatchers(HttpMethod.GET).permitAll()
                 .antMatchers(HttpMethod.POST).hasAnyRole("EDITOR", "ADMIN")
                 .antMatchers(HttpMethod.PUT).hasAnyRole("EDITOR", "ADMIN")
                 .antMatchers(HttpMethod.PATCH).hasAnyRole("EDITOR", "ADMIN")
