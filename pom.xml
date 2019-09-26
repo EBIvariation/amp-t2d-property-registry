@@ -186,7 +186,7 @@
                             <replacements>
                                 <replacement>
                                     <token>https://petstore.swagger.io/v2/swagger.json</token>
-                                    <value>http://localhost:8080/amp-t2d-property-registry-0.1.0/property.yaml</value>
+                                    <value>http://ves-hx-e9.ebi.ac.uk:8080/amp-t2d-property-registry-0.1.0/property.yaml</value>
                                 </replacement>
                             </replacements>
                         </configuration>

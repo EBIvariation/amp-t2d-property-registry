@@ -34,8 +34,9 @@ public class EnableSecurityConfig extends ResourceServerConfigurerAdapter {
 
     private static final String[] AUTH_WHITELIST = {
             // -- swagger ui
-            "/**",
-            "/*",
+            "/swagger-ui/",
+            "/swagger-ui/index.html",
+            "/property.yaml",
             "/v2/api-docs",
             "/swagger-resources",
             "/swagger-resources/**",
@@ -49,6 +50,7 @@ public class EnableSecurityConfig extends ResourceServerConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers(AUTH_WHITELIST).permitAll()
                 .antMatchers("/users/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET).permitAll()
                 .antMatchers(HttpMethod.POST).hasAnyRole("EDITOR", "ADMIN")
                 .antMatchers(HttpMethod.PUT).hasAnyRole("EDITOR", "ADMIN")
                 .antMatchers(HttpMethod.PATCH).hasAnyRole("EDITOR", "ADMIN")
