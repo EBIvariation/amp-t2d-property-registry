@@ -17,6 +17,8 @@ servers:
 paths:
   /phenotypes:
     get:
+      security:
+        - ApiKeyAuth: []
       tags:
         - Phenotype Entity
       summary: "find all phenotypes."
@@ -52,6 +54,8 @@ paths:
         404:
           description: Not found
     post:
+      security:
+        - ApiKeyAuth: []
       tags:
         - Phenotype Entity
       summary: "save phenotype."
@@ -104,6 +108,7 @@ components:
           description: allowed values of phenotype
       xml:
         name: Phenotype
+
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
