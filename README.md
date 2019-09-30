@@ -22,11 +22,8 @@ Registry service for AMP T2D properties.
    You should get the standard request for authentication.   Once you have accepted authentication copy the Authentication code.   Take the following code replace the values as needed.
  
  ```
- curl \
- –request POST \
- –data “code=[Authentication code from authorization link]&client_id=[Application Client 
- Id]&client_secret=[Application Client Secret]&redirect_uri=urn:ietf:wg:oauth:2.0:oob&grant_type=authorization_code” \
- https://accounts.google.com/o/oauth2/token  
+ curl --request POST --data "code=[Authentication code from authorization link]&client_id=[Application Client 
+ Id]&client_secret=[Application Client Secret]&redirect_uri=urn:ietf:wg:oauth:2.0:oob&grant_type=authorization_code"  https://accounts.google.com/o/oauth2/token  
  ```
  
  You should get something like this:
