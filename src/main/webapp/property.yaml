@@ -105,11 +105,6 @@ components:
       xml:
         name: Phenotype
   securitySchemes:
-    keycloak_auth:
-      type: oauth2
-      flows:
-        authorizationCode:
-          tokenUrl:  http://ves-hx-e9.ebi.ac.uk:8080/dev/registry/ega/ampt2d/auth/realms/securemetadata/protocol/openid-connect/token
-          authorizationUrl: http://ves-hx-e9.ebi.ac.uk:8080/dev/registry/ega/ampt2d/auth/realms/securemetadata/protocol/openid-connect/auth
-          scopes:
-            opened: openid
+    bearerAuth:
+      type: http
+      scheme: bearer
