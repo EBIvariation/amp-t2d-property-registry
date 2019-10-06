@@ -13,7 +13,7 @@ info:
     url: "https://www.apache.org/license/"
 servers:
   - url: http://ves-hx-e9.ebi.ac.uk:8080/dev/registry/
-    description: Production server
+    description: Staging server
 paths:
   /phenotypes:
     get:
