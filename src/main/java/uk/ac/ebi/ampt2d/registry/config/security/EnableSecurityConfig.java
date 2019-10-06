@@ -37,7 +37,7 @@ public class EnableSecurityConfig extends ResourceServerConfigurerAdapter {
             "/swagger-ui/",
             "/swagger-ui/**",
             "/swagger-ui/index.html",
-            "/property.yaml",
+            "/propertys.yaml",
             "/"
     };
 

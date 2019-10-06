@@ -24,7 +24,7 @@ pipeline {
   stages {
     stage('Default Build pointing to Staging DB') {
       steps {
-        sh "mvn clean package -DskipTests -DbuildDirectory=staging/target -Dampt2d-property-registry-db.url=${stagingPostgresDbUrl} -Dampt2d-property-registry-db.username=${postgresDBUserName} -Dampt2d-property-registry-db.password=${postgresDBPassword} -Dsmtp-host=${smtpHost} -Damp-t2d-email-id=${ampt2dEmailId}"
+        sh "mvn clean package -DskipTests -DbuildDirectory=staging/target -Dampt2d-property-registry-db.url=${stagingPostgresDbUrl} -Dampt2d-property-registry-db.username=${postgresDBUserName} -Dampt2d-property-registry-db.password=${postgresDBPassword} -Dsmtp-host=${smtpHost} -Damp-t2d-email-id=${ampt2dEmailId} -Pstaging"
       }
     }
     stage('Build For FallBack And Production') {

@@ -161,9 +161,6 @@
     <profiles>
         <profile>
             <id> staging </id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
             <build>
                 <plugins>
                     <plugin>
@@ -183,7 +180,7 @@
                             <replacements>
                                 <replacement>
                                     <token>https://petstore.swagger.io/v2/swagger.json</token>
-                                    <value>http://ves-hx-e9.ebi.ac.uk:8080/dev/registry/property.yaml</value>
+                                    <value>http://ves-hx-e9.ebi.ac.uk:8080/dev/registry/propertys.yaml</value>
                                 </replacement>
                             </replacements>
                         </configuration>
