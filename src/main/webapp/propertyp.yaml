@@ -1,0 +1,116 @@
+openapi: "3.0.2"
+info:
+  title: "AMP T2D Property registry API"
+  description: "Property registry API for the project AMP-T2D"
+  version: "1.0SNAPSHOT"
+  termsOfService: "www.ebi.ac.uk/terms"
+  contact:
+    name: "Property registry API Admin"
+    url: "www.ebi.ac.uk"
+    email: "prop@gmail.com"
+  license:
+    name: "Apache 2.0"
+    url: "https://www.apache.org/license/"
+servers:
+  - url: http://ves-hx-e9.ebi.ac.uk:8080/dev/registry/
+    description: Staging server(production exp)
+paths:
+  /phenotypes:
+    get:
+      security:
+        - ApiKeyAuth: []
+      tags:
+        - Phenotype Entity
+      summary: "find all phenotypes."
+      description: "Get all phenotypes of Type2Diabetes."
+      operationId: GetPhenotypeEntity
+      parameters:
+        - name: page
+          in: query
+          description: "Number of pages."
+          schema:
+            type: string
+        - name: size
+          in: query
+          description: "size of page."
+          schema:
+            type: string
+        - name: sort
+          in: query
+          description: "Ascending or descending."
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK, Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Phenotype'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: Not found
+    post:
+      security:
+        - ApiKeyAuth: []
+      tags:
+        - Phenotype Entity
+      summary: "save phenotype."
+      description: "Store a phenotype of Type2Diabetes."
+      operationId: PostPhenotypeEntity
+      requestBody:
+        description: Store a phenotype of Type2Diabetes.
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/Phenotype'
+        required: true
+      responses:
+        200:
+          description: OK, Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Phenotype'
+        201:
+          description: Created
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+        404:
+          description: Not found
+
+components:
+  schemas:
+    Phenotype:
+      type: object
+      properties:
+        id:
+          type: string
+          description: generated phid of phenotype
+        phenotypeGroup:
+          type: string
+          enum: [ANTHROPOMETRIC,CARDIOVASCULAR,GLYCEMIC]
+          description: phenotype group
+        description:
+          type: string
+          description: description of phenotype
+        type:
+          type: string
+          enum: [DICHOTOMOUS, MULTICHOTOMOUS]
+          description: description of phenotype
+        allowedValues:
+          type: string
+          description: allowed values of phenotype
+      xml:
+        name: Phenotype
+
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization

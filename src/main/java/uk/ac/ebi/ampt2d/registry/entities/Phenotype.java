@@ -18,7 +18,6 @@
 package uk.ac.ebi.ampt2d.registry.entities;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -55,7 +54,6 @@ public class Phenotype implements IdentifiableEntity<String> {
         CONTINUOUS
     }
 
-    @ApiModelProperty(position = 1, required = true)
     @JsonProperty
     @NotNull
     @Size(min = 1, max = 255)
@@ -63,28 +61,24 @@ public class Phenotype implements IdentifiableEntity<String> {
     @Column(nullable = false, unique = true, updatable = false)
     private String id;
 
-    @ApiModelProperty(position = 2, required = true)
     @JsonProperty
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Group phenotypeGroup;
 
-    @ApiModelProperty(position = 3, required = true)
     @NotNull
     @NotBlank
     @JsonProperty
     @Column(nullable = false, columnDefinition = "TEXT")
     private String description;
 
-    @ApiModelProperty(position = 4, required = true)
     @JsonProperty
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Type type;
 
-    @ApiModelProperty(position = 5, required = true)
     @JsonProperty
     @NotNull
     @Column(nullable = false)

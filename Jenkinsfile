@@ -24,7 +24,7 @@ pipeline {
   stages {
     stage('Default Build pointing to Staging DB') {
       steps {
-        sh "mvn clean package -DskipTests -DbuildDirectory=staging/target -Dampt2d-property-registry-db.url=${stagingPostgresDbUrl} -Dampt2d-property-registry-db.username=${postgresDBUserName} -Dampt2d-property-registry-db.password=${postgresDBPassword} -Dsmtp-host=${smtpHost} -Damp-t2d-email-id=${ampt2dEmailId}"
+        sh "mvn clean package -DskipTests -DbuildDirectory=staging/target -Dampt2d-property-registry-db.url=${stagingPostgresDbUrl} -Dampt2d-property-registry-db.username=${postgresDBUserName} -Dampt2d-property-registry-db.password=${postgresDBPassword} -Dsmtp-host=${smtpHost} -Damp-t2d-email-id=${ampt2dEmailId} -Pstaging"
       }
     }
     stage('Build For FallBack And Production') {
@@ -35,9 +35,9 @@ pipeline {
       }
       steps {
         echo 'Build pointing to FallBack DB'
-        sh "mvn clean package -DskipTests -DbuildDirectory=fallback/target -Dampt2d-property-registry-db.url=${fallBackPostgresDbUrl} -Dampt2d-property-registry-db.username=${postgresDBUserName} -Dampt2d-property-registry-db.password=${postgresDBPassword} -Dsmtp-host=${smtpHost} -Damp-t2d-email-id=${ampt2dEmailId}"
+        sh "mvn clean package -DskipTests -DbuildDirectory=fallback/target -Dampt2d-property-registry-db.url=${fallBackPostgresDbUrl} -Dampt2d-property-registry-db.username=${postgresDBUserName} -Dampt2d-property-registry-db.password=${postgresDBPassword} -Dsmtp-host=${smtpHost} -Damp-t2d-email-id=${ampt2dEmailId} -Pproduction"
         echo 'Build pointing to Production DB'
-        sh "mvn clean package -DskipTests -DbuildDirectory=production/target -Dampt2d-property-registry-db.url=${productionPostgresDbUrl} -Dampt2d-property-registry-db.username=${postgresDBUserName} -Dampt2d-property-registry-db.password=${postgresDBPassword} -Dsmtp-host=${smtpHost} -Damp-t2d-email-id=${ampt2dEmailId}"
+        sh "mvn clean package -DskipTests -DbuildDirectory=production/target -Dampt2d-property-registry-db.url=${productionPostgresDbUrl} -Dampt2d-property-registry-db.username=${postgresDBUserName} -Dampt2d-property-registry-db.password=${postgresDBPassword} -Dsmtp-host=${smtpHost} -Damp-t2d-email-id=${ampt2dEmailId} -Pproduction"
       }
     }
     stage('Deploy To Staging') {

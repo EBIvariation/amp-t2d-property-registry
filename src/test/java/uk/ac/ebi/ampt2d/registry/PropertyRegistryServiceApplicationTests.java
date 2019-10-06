@@ -277,10 +277,6 @@ public class PropertyRegistryServiceApplicationTests {
 
         // AUTH_WHITELIST URLs not secured
         mockMvc.perform(get("/")).andExpect(status().isOk());
-        mockMvc.perform(get("/swagger-ui.html")).andExpect(status().isOk());
-        mockMvc.perform(get("/v2/api-docs")).andExpect(status().isOk());
-        mockMvc.perform(get("/swagger-resources/")).andExpect(status().isOk());
-        mockMvc.perform(get("/webjars/springfox-swagger-ui/fonts/open-sans-v15-latin-regular.woff2")).andExpect(status().isOk());
 
         Property property = new Property("CALL_RATE", Property.Type.DOUBLE, Property.Meaning.CALL_RATE, "calling rate");
         Phenotype phenotype1 = new Phenotype("BMI", Phenotype.Group.ANTHROPOMETRIC, "Body Mass Index",
