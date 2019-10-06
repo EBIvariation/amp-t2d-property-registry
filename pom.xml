@@ -160,7 +160,7 @@
 
     <profiles>
         <profile>
-            <id> staging </id>
+            <id>staging</id>
             <build>
                 <plugins>
                     <plugin>
@@ -188,6 +188,34 @@
                 </plugins>
             </build>
         </profile>
+        <profile>
+            <id>production</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.google.code.maven-replacer-plugin</groupId>
+                        <artifactId>replacer</artifactId>
+                        <version>1.5.3</version>
+                        <executions>
+                            <execution>
+                                <phase>prepare-package</phase>
+                                <goals>
+                                    <goal>replace</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <file>${project.build.directory}/swagger-ui/META-INF/resources/webjars/swagger-ui/3.23.0/index.html</file>
+                            <replacements>
+                                <replacement>
+                                    <token>https://petstore.swagger.io/v2/swagger.json</token>
+                                    <value>http://ves-hx-e9.ebi.ac.uk:8080/dev/registry/propertyp.yaml</value>
+                                </replacement>
+                            </replacements>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
     </profiles>
-
 </project>
