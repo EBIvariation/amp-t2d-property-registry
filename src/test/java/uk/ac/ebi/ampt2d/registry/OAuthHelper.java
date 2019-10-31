@@ -18,8 +18,8 @@
 package uk.ac.ebi.ampt2d.registry;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.AuthoritiesExtractor;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -34,8 +34,6 @@ import org.springframework.security.oauth2.provider.OAuth2Request;
 import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
 import org.springframework.stereotype.Component;
 import org.springframework.test.web.servlet.request.RequestPostProcessor;
-import uk.ac.ebi.ampt2d.registry.config.security.CustomAuthoritiesExtractor;
-import uk.ac.ebi.ampt2d.registry.repositories.RegistryUserRepository;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -46,6 +44,7 @@ import java.util.Set;
 
 @Component
 @EnableAuthorizationServer
+@ConditionalOnProperty(name = "security.enabled", havingValue = "true")
 public class OAuthHelper extends AuthorizationServerConfigurerAdapter {
 
     @Autowired
@@ -55,7 +54,7 @@ public class OAuthHelper extends AuthorizationServerConfigurerAdapter {
     private ClientDetailsService clientDetailsService;
 
     @Autowired
-    private RegistryUserRepository registryUserRepository;
+    private AuthoritiesExtractor authoritiesExtractor;
 
     public RequestPostProcessor bearerToken(final String clientid) {
         return mockRequest -> {
@@ -69,7 +68,7 @@ public class OAuthHelper extends AuthorizationServerConfigurerAdapter {
         ClientDetails client = clientDetailsService.loadClientByClientId(clientId);
         Map<String, Object> clientEmailMap = new HashMap<>();
         clientEmailMap.put("email", clientId);
-        Collection<GrantedAuthority> authorities = authoritiesExtractor(registryUserRepository).extractAuthorities(clientEmailMap);
+        Collection<GrantedAuthority> authorities = authoritiesExtractor.extractAuthorities(clientEmailMap);
         Set<String> resourceIds = client.getResourceIds();
         Set<String> scopes = client.getScope();
 
@@ -96,10 +95,5 @@ public class OAuthHelper extends AuthorizationServerConfigurerAdapter {
                 .withClient("testEditor@gmail.com").and()
                 .withClient("testUser@gmail.com").and()
                 .withClient("testAdmin@gmail.com");
-    }
-
-    @Bean
-    public AuthoritiesExtractor authoritiesExtractor(RegistryUserRepository registryUserRepository) {
-        return new CustomAuthoritiesExtractor(registryUserRepository);
     }
 }

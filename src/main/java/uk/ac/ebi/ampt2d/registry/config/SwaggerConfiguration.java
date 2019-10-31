@@ -18,8 +18,6 @@
 package uk.ac.ebi.ampt2d.registry.config;
 
 import com.fasterxml.classmate.TypeResolver;
-import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -43,15 +41,16 @@ import springfox.documentation.spring.data.rest.configuration.SpringDataRestConf
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger.web.UiConfiguration;
 import springfox.documentation.swagger.web.UiConfigurationBuilder;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
+import springfox.documentation.swagger2.annotations.EnableSwagger2WebMvc;
 
 import java.lang.reflect.WildcardType;
 import java.util.Arrays;
+import java.util.function.Predicate;
 
 import static springfox.documentation.schema.AlternateTypeRules.newRule;
 
 @Configuration
-@EnableSwagger2
+@EnableSwagger2WebMvc
 @Import({SpringDataRestConfiguration.class, BeanValidatorPluginsConfiguration.class})
 public class SwaggerConfiguration {
 
@@ -85,12 +84,10 @@ public class SwaggerConfiguration {
     }
 
     private Predicate<String> getScanRestServicesPathPredicate() {
-        return Predicates.and(
-                Predicates.not(PathSelectors.regex("/actuator.*")), // Hide spring-actuator
-                Predicates.not(PathSelectors.regex("/error.*")), // Hide spring-data error
-                Predicates.not(PathSelectors.regex("/profile.*")),// Hide spring-data profile
-                Predicates.not(PathSelectors.regex("/users.*")) // Hide user-profile
-        );
+        return PathSelectors.regex(".*/actuator.*") // Hide spring-actuator
+                .or(PathSelectors.regex(".*/error.*")) // Hide spring-data error
+                .or(PathSelectors.regex(".*/profile.*")) // Hide spring-data profile
+                .or(PathSelectors.regex(".*/users.*")).negate(); // Hide users
     }
 
     private ApiInfo getApiInfo() {
