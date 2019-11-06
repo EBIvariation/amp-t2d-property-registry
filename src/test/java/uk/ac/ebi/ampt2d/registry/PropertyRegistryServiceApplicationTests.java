@@ -18,26 +18,39 @@
 package uk.ac.ebi.ampt2d.registry;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.AutoConfigureJsonTesters;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.restdocs.JUnitRestDocumentation;
+import org.springframework.security.web.FilterChainProxy;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 import uk.ac.ebi.ampt2d.registry.entities.Phenotype;
 import uk.ac.ebi.ampt2d.registry.entities.Property;
 import uk.ac.ebi.ampt2d.registry.repositories.PhenotypeRepository;
 import uk.ac.ebi.ampt2d.registry.repositories.PropertyRepository;
 import uk.ac.ebi.ampt2d.registry.service.mail.MailService;
 
+import javax.annotation.Resource;
+
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doNothing;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_CLASS;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -49,12 +62,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(properties = {"security.enabled=true", "spring.jpa.hibernate.ddl-auto=none"})
-@AutoConfigureMockMvc
 @AutoConfigureJsonTesters
 @DirtiesContext(classMode = AFTER_CLASS)
 public class PropertyRegistryServiceApplicationTests {
 
-    @Autowired
+    @Rule
+    public JUnitRestDocumentation restDocumentation = new JUnitRestDocumentation("target/generated-snippets");
+
     private MockMvc mockMvc;
 
     @Autowired
@@ -75,11 +89,24 @@ public class PropertyRegistryServiceApplicationTests {
     @MockBean
     private MailService mailService;
 
+    @Autowired
+    private WebApplicationContext webApplicationContext;
+
+    @Resource
+    private FilterChainProxy springSecurityFilterChain;
+
     @Before
     public void setUp() throws Exception {
         doNothing().when(mailService).send(anyString());
         phenotypeRepository.deleteAll();
         propertyRepository.deleteAll();
+        mockMvc = MockMvcBuilders.webAppContextSetup(this.webApplicationContext).apply
+                (documentationConfiguration(restDocumentation))
+                .alwaysDo(document("{method-name}/{step}"
+                        , preprocessRequest(prettyPrint())
+                        , preprocessResponse(prettyPrint())))
+                .addFilters(springSecurityFilterChain)
+                .build();
     }
 
     @Test
@@ -90,10 +117,32 @@ public class PropertyRegistryServiceApplicationTests {
                 jsonPath("$._links.phenotypes").exists());
     }
 
-    private String postTestEntity(String uri, String content) throws Exception {
+    private String postTestPhenotypeEntity(String uri, String content) throws Exception {
         MvcResult mvcResult = mockMvc.perform(post(uri).with(oAuthHelper.bearerToken("testEditor@gmail.com")).content
                 (content))
                 .andExpect(status().isCreated())
+                .andDo(document("{method-name}/{step}", requestFields(
+                        fieldWithPath("id").description("Unique identifier of a Phenotype"),
+                        fieldWithPath("description").description("Description of a Phenotype"),
+                        fieldWithPath("type").description("CONTINUOUS/DICHOTOMOUS/TRICHOTOMOUS"),
+                        fieldWithPath("phenotypeGroup").description("Example values: ANTHROPOMETRIC,RENAL.."),
+                        fieldWithPath("allowedValues").description("Format of values eg : nn.nn / 0 or 1")
+                )))
+                .andReturn();
+
+        return mvcResult.getResponse().getHeader("Location");
+    }
+
+    private String postTestPropertyEntity(String uri, String content) throws Exception {
+        MvcResult mvcResult = mockMvc.perform(post(uri).with(oAuthHelper.bearerToken("testEditor@gmail.com")).content
+                (content))
+                .andExpect(status().isCreated())
+                .andDo(document("{method-name}/{step}", requestFields(
+                        fieldWithPath("id").description("Unique identifier of a Property"),
+                        fieldWithPath("description").description("Description of a Property"),
+                        fieldWithPath("type").description("Example values: DOUBLE,INTEGER.."),
+                        fieldWithPath("meaning").description("meaning related to portal")
+                )))
                 .andReturn();
 
         return mvcResult.getResponse().getHeader("Location");
@@ -102,7 +151,7 @@ public class PropertyRegistryServiceApplicationTests {
     private String postTestPhenotype() throws Exception {
         Phenotype phenotype = new Phenotype("BMI", Phenotype.Group.ANTHROPOMETRIC, "Body Mass Index",
                 Phenotype.Type.CONTINUOUS, "nn.nn");
-        return postTestEntity("/phenotypes", phenotypeJacksonTester.write(phenotype).getJson());
+        return postTestPhenotypeEntity("/phenotypes", phenotypeJacksonTester.write(phenotype).getJson());
     }
 
     @Test
@@ -174,7 +223,7 @@ public class PropertyRegistryServiceApplicationTests {
     private String postTestProperty() throws Exception {
         Property property = new Property("CALL_RATE", Property.Type.FLOAT, Property.Meaning.CALL_RATE, "calling rate");
 
-        return postTestEntity("/properties", propertyJacksonTester.write(property).getJson());
+        return postTestPropertyEntity("/properties", propertyJacksonTester.write(property).getJson());
     }
 
     @Test
@@ -256,9 +305,9 @@ public class PropertyRegistryServiceApplicationTests {
         Property property1 = new Property("CALL_RATE", Property.Type.DOUBLE, Property.Meaning.CALL_RATE, "calling rate");
         Property property2 = new Property("MAF", Property.Type.FLOAT, Property.Meaning.MAF, "MAF");
 
-        postTestEntity("/properties", propertyJacksonTester.write(property1).getJson());
+        postTestPropertyEntity("/properties", propertyJacksonTester.write(property1).getJson());
 
-        postTestEntity("/properties", propertyJacksonTester.write(property2).getJson());
+        postTestPropertyEntity("/properties", propertyJacksonTester.write(property2).getJson());
 
         mockMvc.perform(get("/properties?size=1").with(oAuthHelper.bearerToken("testUser@gmail.com")))
                 .andExpect(status().isOk())

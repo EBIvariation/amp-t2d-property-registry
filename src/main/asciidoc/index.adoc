@@ -1,0 +1,170 @@
+= Getting Started With Spring REST Docs
+
+This is an example output for the registry service
+
+:snippets: ../../../target/generated-snippets
+
+=== Create Entity using POST Requests
+
+==== Phenotype
+
+.requestFields
+
+include::{snippets}/should-create-phenotype/1/request-fields.adoc[]
+
+.request
+
+include::{snippets}/should-create-phenotype/1/http-request.adoc[]
+
+.response
+
+include::{snippets}/should-create-phenotype/1/http-response.adoc[]
+
+
+==== Property
+
+.requestFields
+
+include::{snippets}/should-create-property/1/request-fields.adoc[]
+
+.request
+
+include::{snippets}/should-create-property/1/http-request.adoc[]
+
+.response
+
+include::{snippets}/should-create-property/1/http-response.adoc[]
+
+
+== Query Entity using GET Requests
+
+==== Phenotype
+.request
+
+include::{snippets}/should-query-phenotype/1/http-request.adoc[]
+
+.response
+
+include::{snippets}/should-query-phenotype/1/http-response.adoc[]
+
+==== Property
+.request
+
+include::{snippets}/should-query-properties/1/http-request.adoc[]
+
+.response
+
+include::{snippets}/should-query-properties/1/http-response.adoc[]
+
+== Update Entity using PATCH/PUT Requests
+
+==== Phenotype
+.request
+
+include::{snippets}/should-update-phenotype/2/http-request.adoc[]
+
+.response
+
+include::{snippets}/should-update-phenotype/2/http-response.adoc[]
+
+==== Property
+.request
+
+include::{snippets}/should-update-property/2/http-request.adoc[]
+
+.response
+include::{snippets}/should-update-property/2/http-response.adoc[]
+
+== Partial update Entity using PATCH/PUT Requests
+
+==== Phenotype
+.request
+
+include::{snippets}/should-partially-update-phenotype/2/http-request.adoc[]
+
+.response
+
+include::{snippets}/should-partially-update-phenotype/2/http-response.adoc[]
+
+==== Property
+.request
+
+include::{snippets}/should-partially-update-property/2/http-request.adoc[]
+
+.response
+include::{snippets}/should-partially-update-property/2/http-response.adoc[]
+
+== Delete Entity using DELETE Requests
+
+==== Phenotype
+.request
+
+include::{snippets}/should-delete-phenotype/2/http-request.adoc[]
+
+.response
+
+include::{snippets}/should-delete-phenotype/2/http-response.adoc[]
+
+==== Property
+.request
+
+include::{snippets}/should-delete-property/2/http-request.adoc[]
+
+.response
+include::{snippets}/should-delete-property/2/http-response.adoc[]
+
+== Test Authorization
+
+==== Accessing secured endpoints without authentication
+.request
+
+include::{snippets}/test-authorization/1/http-request.adoc[]
+
+.response
+
+include::{snippets}/test-authorization/1/http-response.adoc[]
+
+==== Accessing secured endpoints with authentication token
+===== User with ROLE_READ
+.request
+
+include::{snippets}/test-authorization/11/http-request.adoc[]
+
+.response
+
+include::{snippets}/test-authorization/11/http-response.adoc[]
+
+.request
+
+include::{snippets}/test-authorization/14/http-request.adoc[]
+
+.response
+
+include::{snippets}/test-authorization/14/http-response.adoc[]
+
+===== User with ROLE_EDITOR
+
+.request
+
+include::{snippets}/test-authorization/15/http-request.adoc[]
+
+.response
+
+include::{snippets}/test-authorization/15/http-response.adoc[]
+
+.request
+
+include::{snippets}/test-authorization/19/http-request.adoc[]
+
+.response
+
+include::{snippets}/test-authorization/19/http-response.adoc[]
+
+===== User with ROLE_ADMIN
+.request
+
+include::{snippets}/test-authorization/20/http-request.adoc[]
+
+.response
+
+include::{snippets}/test-authorization/20/http-response.adoc[]
